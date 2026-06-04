@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Users Pagination</title>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+        table {
+            font-family: Arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .controls {
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 6px 12px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        input {
+            padding: 6px;
+            width: 80px;
+        }
+
+        #pageable_div_id {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>User Pagination Example</h2>
+
+<div class="controls">
+    <button onclick="getUsers()">Get Users</button>
+
+    <label for="page_size_id">Page Size:</label>
+    <input id="page_size_id"
+           type="number"
+           min="1"
+           th:value="${pageSize != null ? pageSize : 10}"
+           value="10">
+</div>
+
+<table id="users_table_id">
+    <thead>
+    <tr>
+        <th onclick="sort('id')">Id</th>
+        <th onclick="sort('login')">Login</th>
+        <th onclick="sort('age')">Age</th>
+        <th onclick="sort('email')">Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Optional server-side rendering if users are provided -->
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
+        <td th:text="${user.login}">john</td>
+        <td th:text="${user.age}">25</td>
+        <td th:text="${user.email}">john@example.com</td>
+    </tr>
+    </tbody>
+</table>
+
+<div id="pageable_div_id"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    // Values injected by Thymeleaf
+    const apiUrl = /*[[${apiUrl != null ? apiUrl : '/getUsers'}]]*/ '/getUsers';
+    let pageNumber = /*[[${pageNumber != null ? pageNumber : 0}]]*/ 0;
+    let defaultSortingField = /*[[${sortingField != null ? sortingField : 'id'}]]*/ 'id';
+    let defaultSortingDirection = /*[[${sortingDirection != null ? sortingDirection : 'DESC'}]]*/ 'DESC';
+
+    let previousPage;
+    let nextPage;
+    let sortingDirection = defaultSortingDirection;
+    let sortingField = defaultSortingField;
+    let currentPage = pageNumber;
+
+    function displayPageable(pageable, totalElements, totalPages) {
+        previousPage = pageable.pageNumber - 1;
+        if (previousPage < 0) previousPage = 0;
+
+        nextPage = pageable.pageNumber + 1;
+        if (nextPage >= totalPages) nextPage = totalPages - 1;
+
+        let html =
+            '<button onclick="getUsers(' + previousPage + ', \'' + sortingField + '\', \'' + sortingDirection + '\')">Previous</button>' +
+            '<button onclick="getUsers(' + nextPage + ', \'' + sortingField + '\', \'' + sortingDirection + '\')">Next</button>' +
+            '<br><span>Showing page ' + (pageable.pageNumber + 1) +
+            ' of ' + totalPages +
+            ' | Total records: ' + totalElements + '</span>';
+
+        document.getElementById("pageable_div_id").innerHTML = html;
+    }
+
+    function sort(field) {
+        if (sortingField === field) {
+            sortingDirection = (sortingDirection === 'ASC') ? 'DESC' : 'ASC';
+        } else {
+            sortingField = field;
+            sortingDirection = 'ASC';
+        }
+
+        getUsers(currentPage, sortingField, sortingDirection);
+    }
+
+    function getUsers(page, field, direction) {
+        let pageSize = document.getElementById("page_size_id").value || 10;
+
+        if (page == null) page = pageNumber;
+        if (field == null) field = defaultSortingField;
+        if (direction == null) direction = defaultSortingDirection;
+
+        $.get(
+            apiUrl,
+            {
+                page: page,
+                size: pageSize,
+                sortingField: field,
+                sortingDirection: direction
+            },
+            function (data) {
+                let html =
+                    '<thead>' +
+                    '<tr>' +
+                    '<th onclick="sort(\'id\')">Id</th>' +
+                    '<th onclick="sort(\'login\')">Login</th>' +
+                    '<th onclick="sort(\'age\')">Age</th>' +
+                    '<th onclick="sort(\'email\')">Email</th>' +
+                    '</tr>' +
+                    '</thead><tbody>';
+
+                for (let i = 0; i < data.content.length; i++) {
+                    html +=
+                        '<tr>' +
+                        '<td>' + data.content[i].id + '</td>' +
+                        '<td>' + data.content[i].login + '</td>' +
+                        '<td>' + data.content[i].age + '</td>' +
+                        '<td>' + data.content[i].email + '</td>' +
+                        '</tr>';
+                }
+
+                html += '</tbody>';
+
+                document.getElementById("users_table_id").innerHTML = html;
+
+                displayPageable(
+                    data.pageable,
+                    data.totalElements,
+                    data.totalPages
+                );
+
+                currentPage = data.number;
+            }
+        );
+    }
+
+    // Automatically load users when page opens
+    $(document).ready(function () {
+        getUsers();
+    });
+
+    /*]]>*/
+</script>
+
+</body>
+</html>
