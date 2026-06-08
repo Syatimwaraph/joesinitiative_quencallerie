@@ -62,7 +62,7 @@ public class QuencallerieMngtV1Application {
                     UserOrg admin = new UserOrg();
                     admin.setUsername(username);
                     admin.setPassword(passwordEncoder.encode(rawPassword));
-                    admin.setRole(Roles.SALER);
+                    admin.setRole(Roles.ADMIN);
 
                     userRepository.save(admin);
 
