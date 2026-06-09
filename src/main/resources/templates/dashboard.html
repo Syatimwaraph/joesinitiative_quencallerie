@@ -208,7 +208,7 @@
 
                             <li class="page-item" th:classappend="${products.first} ? 'disabled'">
                                 <a class="page-link"
-                                   th:href="@{/pos(page=${products.number - 1}, size=${products.size}, keyword=${keyword})}">
+                                   th:href="@{/dashboard(page=${products.number - 1}, size=${products.size}, keyword=${keyword})}">
                                     ‹
                                 </a>
                             </li>
@@ -216,14 +216,14 @@
                             <li class="page-item" th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}"
                                 th:classappend="${i == products.number} ? 'active'">
                                 <a class="page-link"
-                                   th:href="@{/pos(page=${i}, size=${products.size}, keyword=${keyword})}"
+                                   th:href="@{/dashboard(page=${i}, size=${products.size}, keyword=${keyword})}"
                                    th:text="${i + 1}">
                                 </a>
                             </li>
 
                             <li class="page-item" th:classappend="${products.last} ? 'disabled'">
                                 <a class="page-link"
-                                   th:href="@{/pos(page=${products.number + 1}, size=${products.size}, keyword=${keyword})}">
+                                   th:href="@{/dashboard(page=${products.number + 1}, size=${products.size}, keyword=${keyword})}">
                                     ›
                                 </a>
                             </li>
