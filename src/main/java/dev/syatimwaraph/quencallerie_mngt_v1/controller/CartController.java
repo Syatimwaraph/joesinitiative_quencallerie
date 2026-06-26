@@ -152,7 +152,7 @@ public class CartController {
     }
 
     @GetMapping("/checkout")
-    public String checkout(HttpSession session) {
+    public String checkout(HttpSession session, Model model) {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         if (cart == null || cart.isEmpty()) {
             return "redirect:/pos";
@@ -202,10 +202,27 @@ public class CartController {
             session.setAttribute("lastSaleId", sale.getId());
 
         // Clear cart
-         session.removeAttribute("cart");
-         session.removeAttribute("discount");
+        session.removeAttribute("cart");
+        session.removeAttribute("discount");
+        session.removeAttribute("totalBeforeDiscount");
+        session.removeAttribute("totalAfterDiscount");
+        session.removeAttribute("finalTotal");
+
+        model.addAttribute("saleId", sale.getId());
 
         return "redirect:/cart/print_receipt/" + savedSales.getId();
+    }
+
+    @GetMapping("/clear")
+    public String clearCart(HttpSession session) {
+
+        session.removeAttribute("cart");
+        session.removeAttribute("discount");
+        session.removeAttribute("totalBeforeDiscount");
+        session.removeAttribute("totalAfterDiscount");
+        session.removeAttribute("finalTotal");
+
+        return "redirect:/pos";
     }
 
     @GetMapping("/print_receipt/{saleId}")

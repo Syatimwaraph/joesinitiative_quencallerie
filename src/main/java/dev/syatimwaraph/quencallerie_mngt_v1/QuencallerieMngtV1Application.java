@@ -21,61 +21,61 @@ public class QuencallerieMngtV1Application {
          * Creates a default ADMIN user when the application starts.
          * The user is created only if no user with the username "admin" exists.
      */
-        @Bean
-        CommandLineRunner createDefaultSaler(UserOrgRepository userRepository,
-                                             PasswordEncoder passwordEncoder) {
-            return args -> {
+//        @Bean
+//        CommandLineRunner createDefaultSaler(UserOrgRepository userRepository,
+//                                             PasswordEncoder passwordEncoder) {
+//            return args -> {
+//
+//                String username = "saler2";
+//                String rawPassword = "saler12345";
+//
+//                if (userRepository.findByUsername(username).isEmpty()) {
+//
+//                    UserOrg admin = new UserOrg();
+//                    admin.setUsername(username);
+//                    admin.setPassword(passwordEncoder.encode(rawPassword));
+//                    admin.setRole(Roles.SALER);
+//
+//                    userRepository.save(admin);
+//
+//                    System.out.println("======================================");
+//                    System.out.println("Default SALER user created");
+//                    System.out.println("Username: ");
+//                    System.out.println("Password: ");
+//                    System.out.println("======================================");
+//                } else {
+//                    System.out.println("SALER user already exists.");
+//                }
+//            };
+//        }
 
-                String username = "saler";
-                String rawPassword = "saler123";
-
-                if (userRepository.findByUsername(username).isEmpty()) {
-
-                    UserOrg admin = new UserOrg();
-                    admin.setUsername(username);
-                    admin.setPassword(passwordEncoder.encode(rawPassword));
-                    admin.setRole(Roles.SALER);
-
-                    userRepository.save(admin);
-
-                    System.out.println("======================================");
-                    System.out.println("Default SALER user created");
-                    System.out.println("Username: ");
-                    System.out.println("Password: ");
-                    System.out.println("======================================");
-                } else {
-                    System.out.println("SALER user already exists.");
-                }
-            };
-        }
-
-        @Bean
-        CommandLineRunner createDefaultAdmin(UserOrgRepository userRepository,
-                                             PasswordEncoder passwordEncoder) {
-            return args -> {
-
-                String username = "admin";
-                String rawPassword = "admin123";
-
-                if (userRepository.findByUsername(username).isEmpty()) {
-
-                    UserOrg admin = new UserOrg();
-                    admin.setUsername(username);
-                    admin.setPassword(passwordEncoder.encode(rawPassword));
-                    admin.setRole(Roles.ADMIN);
-
-                    userRepository.save(admin);
-
-                    System.out.println("======================================");
-                    System.out.println("Default ADMIN user created");
-                    System.out.println("Username: ");
-                    System.out.println("Password: ");
-                    System.out.println("======================================");
-                } else {
-                    System.out.println("ADMIN user already exists.");
-                }
-            };
-        }
+//        @Bean
+//        CommandLineRunner createDefaultAdmin(UserOrgRepository userRepository,
+//                                             PasswordEncoder passwordEncoder) {
+//            return args -> {
+//
+//                String username = "admin";
+//                String rawPassword = "admin123";
+//
+//                if (userRepository.findByUsername(username).isEmpty()) {
+//
+//                    UserOrg admin = new UserOrg();
+//                    admin.setUsername(username);
+//                    admin.setPassword(passwordEncoder.encode(rawPassword));
+//                    admin.setRole(Roles.ADMIN);
+//
+//                    userRepository.save(admin);
+//
+//                    System.out.println("======================================");
+//                    System.out.println("Default ADMIN user created");
+//                    System.out.println("Username: ");
+//                    System.out.println("Password: ");
+//                    System.out.println("======================================");
+//                } else {
+//                    System.out.println("ADMIN user already exists.");
+//                }
+//            };
+//        }
     }
 
 

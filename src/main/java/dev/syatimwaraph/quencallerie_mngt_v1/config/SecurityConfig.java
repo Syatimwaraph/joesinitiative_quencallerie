@@ -34,7 +34,9 @@ public class SecurityConfig {
                                 "/dashboard/**",
                                 "/users/**",
                                 "/reports/**",
-                                "/requisitions/**"
+                                "/requisitions/**",
+                                "/products/**",
+                                "/sales/**"
                         ).hasRole("ADMIN")
 
                         .requestMatchers("/pos/**", "/cart/**")

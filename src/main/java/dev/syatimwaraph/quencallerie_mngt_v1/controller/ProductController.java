@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/products")
@@ -34,7 +35,7 @@ public class ProductController {
         if (result.hasErrors()) {
             model.addAttribute("products", productRepository.findAll());
             model.addAttribute("categories", ProductCategory.values());
-            return "pos";
+            return "dashboard";
         }
 
         Product product = new Product();
@@ -64,6 +65,21 @@ public class ProductController {
         product.setStock(updatedProduct.getStock());
 
         productRepository.save(product);
+
+        return "redirect:/dashboard";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Long id,
+                                RedirectAttributes redirectAttributes) {
+
+        System.out.println("DELETE REQUEST RECEIVED: " + id);
+
+        productRepository.deleteById(id);
+
+        redirectAttributes.addFlashAttribute(
+                "successMessage",
+                "Product deleted successfully.");
 
         return "redirect:/dashboard";
     }
